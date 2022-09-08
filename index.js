@@ -23,15 +23,14 @@ mongoClient.connect().then(() => {
 })
 
 server.post(`/singin`, async (req,res) => {
+    const token = uuidv4(); 
     console.log(req.body)
-    return res.send(200)
+    return res.send(token)
 })
 
 server.post(`/singup`, async (req,res) => {
     try {
-        const token = uuidv4(); 
-        res.send(token)
-
+        res.send(200)
     } catch (error) {
         console.log(error)
     }
