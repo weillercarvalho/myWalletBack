@@ -62,23 +62,60 @@ server.post(`/singin`, async (req,res) => {
             return res.send({token: token, name: user.name});
         }
         else {
-            return res.status(401).send({message: `Email ou senha incorretos.`})
+            return res.status(401)
         }
+    } catch (error) {
+        return res.sendStatus(500)
+    }
+})
+
+server.post(`/addvalue`, async (req,res) => {
+    const {value, description, type} = req.body;
+    const validation = postValueSchema.validate(req.body, {abortEarly: false})
+    if (validation.error) {
+        const erroMessage = validation.error.details.map(value => value.message);
+        return res.status(422).send(console.log(erroMessage))
+    }
+    try {
+        await db.collection(`values`).insertOne({value,description,type});
+        return res.sendStatus(201)
     } catch (error) {
         return res.status(500).send(error.message)
     }
 })
 
-server.post(`/addvalue`, async (req,res) => {
-    console.log(req.body);
-})
-
 server.post(`/removevalue`, async (req, res) => {
-    console.log(req.body);
+    const {value, description, type} = req.body;
+    const validation = postValueSchema.validate(req.body, {abortEarly: false})
+    if (validation.error) {
+        const erroMessage = validation.error.details.map(value => value.message);
+        return res.status(422).send(console.log(erroMessage))
+    }
+    try {
+        await db.collection(`values`).insertOne({value,description,type});
+        return res.sendStatus(201)
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
 })
 
 server.get(`/result`, async (req,res) => {
-    
+
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token) return res.sendStatus(401);
+    try {
+        const session = await db.collection(`sessions`).findOne({token});
+        if (!session) return res.sendStatus(401);
+        const user = await db.collection(`users`).findOne({_id: session.userId})
+        if (user) {
+            const list = await db.collection(`values`).find().toArray();
+            return res.send(list)
+        } else {
+            return res.sendStatus(401)
+        }
+    } catch (error) {
+        return res.sendStatus(500)
+    }
 })
 
 
