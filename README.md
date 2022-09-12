@@ -15,7 +15,7 @@ A fullstack project focused in the back-end  on the creation of a basic API usin
 
 ## About
 
-This is an web application based in create and consume a simple api using different technologies as React, React Router, Styled-Components, Axios,NodeJS Expressjs, MongoDB, Joi, Bcrypt, Strip-String etc.
+This is an web application based in create and consume a simple api using different technologies as React, React Router, Styled-Components, Axios, NodeJS, Expressjs, MongoDB, Joi, Bcrypt, Strip-String, Uuid etc.
 
 ## Technologies
 <p>
